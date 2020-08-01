@@ -1,35 +1,40 @@
-from singly_linked_list import LinkedList
-from singly_linked_list import Node
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None 
 class RingBuffer:
     def __init__(self, capacity):
         self.capacity = capacity
-        self.storage = LinkedList()
-
+        self.front = None
+        self.rear = None
+        self.size = 0
 
     def append(self, item):
-        #  create new node 
         new_node = Node(item)
-        #  move head pointer to the new_nodes next
-        self.storage.head = new_node.next
-        # checking if the front has an item to overwrite
-        if self.storage.head:
-            # overwrite the fron with new_node
-            self.storage.head = new_node
-        else:
-            #  assign tail pointer to the new node 
-            self.storage.tail = new_node
-
-
-
+        if self.size == self.capacity: # at capacity
+            old_node = self.front # storing the value of the node to delete
+            self.rear.next = new_node
+            self.front = self.front.next
+            old_node.next = None
+            old_node = None
+        elif self.front == None:
+            self.front = new_node
+            self.size +=1
+        else: 
+            self.rear.next = new_node
+            self.size +=1
+        self.rear = new_node
+        self.rear.next = self.front
+       
 
     def get(self):
         values = []
-        current = self.storage.tail
-        while current.next is not self.storage.head:
-            if current.value is not None:
-                values.append(current.value)
-            current = current.prev
-        print(*values, sep=", ")
+        curr = self.front
+        while curr:
+            values.append(curr.value)
+            curr = curr.next
+            if curr == self.front:
+                break
         return values
 
 buffer = RingBuffer(3)
@@ -39,8 +44,9 @@ buffer.get()   # should return []
 buffer.append('a')
 buffer.append('b')
 buffer.append('c')
+buffer.append('d')
 
-print(buffer.get())  # should return ['a', 'b', 'c']
+print(buffer.get())  # should return ['a', 'b', 'c'] 
 
 # # 'd' overwrites the oldest value in the ring buffer, which is 'a'
 # buffer.append('d')
