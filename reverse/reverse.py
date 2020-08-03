@@ -38,19 +38,19 @@ class LinkedList:
 
         return False
 
-    def reverse_list(self, node, prev):        
-        current = self.head
-        next = None
-
+    def reverse_list(self, node, prev):         
+        current = self.head 
+        prev = None
+        #  if the list is empty return
         if not self.head:
             return None
 
         while current:
-            # store the value
+            # store the value of next node 
             next = current.next_node
             # reverse 
-            current.next_node = prev
-            prev = current
+            current.next_node = prev # for the first node the prev is none so we need that stored on line 43
+            prev = current 
             current = next
         self.head = prev
 

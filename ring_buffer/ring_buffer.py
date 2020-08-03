@@ -11,18 +11,33 @@ class RingBuffer:
 
     def append(self, item):
         new_node = Node(item)
-        if self.size == self.capacity: # at capacity
-            old_node = self.front # storing the value of the node to delete
-            self.rear.next = new_node
-            self.front = self.front.next
+        # if list is at capacity
+        if self.size == self.capacity: 
+            # store the value of the node to delete
+            old_node = self.front 
+
+            # add the new node by making it the old rear's pointer 
+            self.rear.next = new_node 
+
+            # change the front pointer to next node
+            self.front = self.front.next #at this point front is the second node in the ring 
+            
+            # disconnect the first node to remove it from the ring
             old_node.next = None
+            # delete the node entirely ?????
             old_node = None
+        # if ring is empty
         elif self.front == None:
             self.front = new_node
+            # increase counter
             self.size +=1
+        # if the list is not empty and not at capacity
         else: 
+            # insert it after the rear
             self.rear.next = new_node
+            # increase counter
             self.size +=1
+        # update the pointers
         self.rear = new_node
         self.rear.next = self.front
        
